@@ -1,18 +1,31 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        shell: '#F2EDE3',
-        paper: '#FBF8F2',
-        walnut: { DEFAULT: '#3B2E26', light: '#5A4638', dark: '#241B15' },
-        reed: { DEFAULT: '#3F6B54', light: '#6B9A7E', dark: '#274434' },
-        lagoon: { DEFAULT: '#1D6B77', light: '#3E97A3', dark: '#0E3C46' },
-        coral: '#C4653A',
-        sandy: '#D9C7A5',
-        ink: '#20211F',
-        muted: '#7C776E'
+        shell: 'rgb(var(--c-shell) / <alpha-value>)',
+        paper: 'rgb(var(--c-paper) / <alpha-value>)',
+        walnut: {
+          DEFAULT: 'rgb(var(--c-walnut) / <alpha-value>)',
+          light: 'rgb(var(--c-walnut-light) / <alpha-value>)',
+          dark: 'rgb(var(--c-walnut-dark) / <alpha-value>)'
+        },
+        reed: {
+          DEFAULT: 'rgb(var(--c-reed) / <alpha-value>)',
+          light: 'rgb(var(--c-reed-light) / <alpha-value>)',
+          dark: 'rgb(var(--c-reed-dark) / <alpha-value>)'
+        },
+        lagoon: {
+          DEFAULT: 'rgb(var(--c-lagoon) / <alpha-value>)',
+          light: 'rgb(var(--c-lagoon-light) / <alpha-value>)',
+          dark: 'rgb(var(--c-lagoon-dark) / <alpha-value>)'
+        },
+        coral: 'rgb(var(--c-coral) / <alpha-value>)',
+        sandy: 'rgb(var(--c-sandy) / <alpha-value>)',
+        ink: 'rgb(var(--c-ink) / <alpha-value>)',
+        muted: 'rgb(var(--c-muted) / <alpha-value>)'
       },
       fontFamily: {
         display: ['Fraunces', 'Georgia', 'serif'],

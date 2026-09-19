@@ -14,8 +14,8 @@ const TONE_CLASS = { good: 'text-reed', warn: 'text-[#9A7B1E]', bad: 'text-coral
 
 export function DailyReport({ report, onClose }: { report: Report; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-walnut-dark/45 p-4" role="dialog" aria-modal="true" aria-label="Daily report">
-      <div className="report-enter w-full max-w-md rounded-xl border border-walnut/20 bg-paper shadow-tank">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-walnut-dark/45 p-4" role="dialog" aria-modal="true" aria-label="Daily report" onClick={onClose}>
+      <div className="report-enter w-full max-w-md rounded-xl border border-walnut/20 bg-paper shadow-tank" onClick={(e) => e.stopPropagation()}>
         <header className="border-b border-walnut/12 px-6 py-4">
           <p className="text-[12px] text-muted">Day {report.fromDay} to day {report.toDay}</p>
           <h2 className="font-display text-[22px] text-ink">Overnight</h2>

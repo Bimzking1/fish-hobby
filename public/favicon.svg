@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="aq-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1D6B77"/>
+      <stop offset="100%" stop-color="#12454E"/>
+    </linearGradient>
+    <linearGradient id="aq-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E2762B"/>
+      <stop offset="62%" stop-color="#E2762B"/>
+      <stop offset="100%" stop-color="#F7D9A6"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#aq-bg)"/>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2"/>
+
+  <g transform="translate(64 64) scale(0.92) translate(-52 -27.5)">
+    <g fill="#EE9C51" opacity="0.8">
+      <path d="M80,30 C90,20 96,8 102,2 C104,16 104,44 102,58 C96,52 90,40 80,30 Z"/>
+      <path d="M36,9 C44,-3 58,-4 66,4 C56,6 46,8 40,10 Z"/>
+      <path d="M46,50 C54,58 62,59 66,56 C58,54 51,52 48,51 Z"/>
+    </g>
+
+    <path d="M0,30 C8,16 26,8 46,8 C66,8 78,18 82,30 C78,42 66,52 46,52 C26,52 8,44 0,30 Z" fill="url(#aq-body)"/>
+    <path d="M0,30 C8,16 26,8 46,8 C66,8 78,18 82,30 C78,42 66,52 46,52 C26,52 8,44 0,30 Z" fill="none" stroke="#B44E1C" stroke-opacity="0.28" stroke-width="1.6"/>
+
+    <path d="M38,34 C44,44 52,48 57,47 C50,41 43,36 40,34 Z" fill="#EE9C51" opacity="0.75"/>
+
+    <circle cx="13" cy="24" r="4.2" fill="#FBF8F2"/>
+    <circle cx="13.6" cy="24" r="2.4" fill="#1A1714"/>
+    <circle cx="12.8" cy="23" r="0.9" fill="#FFFFFF"/>
+  </g>
+
+  <circle cx="98" cy="34" r="2.6" fill="#FFFFFF" opacity="0.45"/>
+  <circle cx="107" cy="46" r="1.8" fill="#FFFFFF" opacity="0.35"/>
+</svg>

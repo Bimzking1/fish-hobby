@@ -1,6 +1,9 @@
+import type { WaterType } from './aquarium';
+
 export type FishSpeciesId =
   | 'guppy' | 'goldfish' | 'betta' | 'neon-tetra'
-  | 'molly' | 'platy' | 'angelfish' | 'corydoras';
+  | 'molly' | 'platy' | 'angelfish' | 'corydoras'
+  | 'clownfish' | 'blue-tang' | 'royal-gramma' | 'firefish';
 
 /** Visual + behavioural state of a single fish. */
 export type FishCondition = 'healthy' | 'stressed' | 'sick' | 'fungus' | 'critical' | 'dead';
@@ -25,6 +28,12 @@ export interface FishSpecies {
   id: FishSpeciesId;
   name: string;
   latin: string;
+  /** Fresh = river fish, salt = sea fish. Must match the tank water or it stresses. */
+  water: WaterType;
+  /** Preferred pH band. The tank pH is derived from the water base + substrate + rocks. */
+  phRange: [number, number];
+  /** Preferred Celsius band. Mismatches stress the fish. */
+  tempRange: [number, number];
   /** Rendered length in scene units (tank is 1000 wide). */
   length: number;
   palette: FishPalette;
@@ -36,6 +45,7 @@ export interface FishSpecies {
   schooling: boolean;
   zone: SwimZone;
   finOpacity: number;
+  price: number;
   note: string;
 }
 

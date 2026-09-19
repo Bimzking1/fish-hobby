@@ -1,14 +1,17 @@
 import type { GameState } from '../types/game';
 import { createInitialState } from '../data/initialState';
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 3;
 const STORAGE_KEY = 'aquarium-keeper:autosave';
 
 export interface SaveFile {
   version: number;
   savedAt: string;
-  game: Pick<GameState, 'day' | 'money' | 'metrics' | 'forecast' | 'selectedFood' | 'care'>;
+  game: Pick<GameState, 'started' | 'theme' | 'day' | 'money' | 'metrics' | 'forecast' | 'selectedFood' | 'care' | 'finance' | 'weatherHistory'>;
   tank: GameState['aquarium'];
+  water: GameState['water'];
+  substrate: GameState['substrate'];
+  rocks: GameState['rocks'];
   fish: GameState['fish'];
   plants: GameState['plants'];
   snails: GameState['snails'];
@@ -18,12 +21,15 @@ export interface SaveFile {
 }
 
 export function toSaveFile(state: GameState): SaveFile {
-  const { day, money, metrics, forecast, selectedFood, care } = state;
+  const { started, theme, day, money, metrics, forecast, selectedFood, care, finance, weatherHistory } = state;
   return {
     version: SAVE_VERSION,
     savedAt: new Date().toISOString(),
-    game: { day, money, metrics, forecast, selectedFood, care },
+    game: { started, theme, day, money, metrics, forecast, selectedFood, care, finance, weatherHistory },
     tank: state.aquarium,
+    water: state.water,
+    substrate: state.substrate,
+    rocks: state.rocks,
     fish: state.fish,
     plants: state.plants,
     snails: state.snails,
@@ -36,19 +42,28 @@ export function toSaveFile(state: GameState): SaveFile {
 /** Unknown or newer saves fall back to a fresh tank rather than crashing. */
 export function fromSaveFile(data: unknown): GameState | null {
   if (typeof data !== 'object' || data === null) return null;
-  const file = data as Partial<SaveFile>;
-  if (file.version !== SAVE_VERSION || !file.game || !file.tank) return null;
+  const file = data as Record<string, unknown>;
+  const version = typeof file.version === 'number' ? file.version : 0;
+  if (version < 2 || version > SAVE_VERSION) return null;
+  if (typeof file.game !== 'object' || file.game === null) return null;
+  const game = file.game as Partial<SaveFile['game']>;
   const base = createInitialState();
   return {
     ...base,
-    ...file.game,
-    aquarium: file.tank,
-    fish: file.fish ?? base.fish,
-    plants: file.plants ?? base.plants,
-    snails: file.snails ?? base.snails,
-    equipment: file.equipment ?? base.equipment,
-    inventory: file.inventory ?? base.inventory,
-    achievements: file.achievements ?? base.achievements
+    ...game,
+    aquarium: (file.tank as GameState['aquarium']) ?? base.aquarium,
+    water: (file.water as GameState['water']) ?? base.water,
+    substrate: (file.substrate as GameState['substrate']) ?? base.substrate,
+    rocks: (file.rocks as GameState['rocks']) ?? base.rocks,
+    fish: (file.fish as GameState['fish']) ?? base.fish,
+    plants: (file.plants as GameState['plants']) ?? base.plants,
+    snails: (file.snails as GameState['snails']) ?? base.snails,
+    equipment: (file.equipment as GameState['equipment']) ?? base.equipment,
+    inventory: (file.inventory as GameState['inventory']) ?? base.inventory,
+    achievements: (file.achievements as GameState['achievements']) ?? base.achievements,
+    // v3 fields — v2 saves just start empty.
+    finance: (game.finance as GameState['finance']) ?? [],
+    weatherHistory: (game.weatherHistory as GameState['weatherHistory']) ?? []
   };
 }
 
