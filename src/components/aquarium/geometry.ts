@@ -23,6 +23,21 @@ export function zoneBand(zone: 'top' | 'mid' | 'bottom' | 'any'): [number, numbe
   }
 }
 
+/**
+ * Where the substrate bed tops out, by coverage. More soil raises the bed —
+ * it fills from the bottom of the tank upward — so anything that stands in the
+ * soil (rocks, rooted plants) sits on this line and rises with it:
+ *   0% -> bare glass (deepest line), 100% -> full bed (SCENE.floorY).
+ */
+export function bedSurface(coverage: number): number {
+  return SCENE.floorY + 24 - (24 * coverage) / 100;
+}
+
+/** The current waterline, by how full the tank is (0..1). */
+export function waterSurface(level: number): number {
+  return lerp(SCENE.floorY, SCENE.surfaceY, clamp(level, 0, 1));
+}
+
 export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }

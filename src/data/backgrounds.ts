@@ -1,4 +1,4 @@
-import type { BackgroundId, SubstrateId } from '../types/aquarium';
+import type { BackgroundId } from '../types/aquarium';
 
 export interface BackgroundDef {
   id: BackgroundId;
@@ -26,24 +26,3 @@ export const BACKGROUNDS: Record<BackgroundId, BackgroundDef> = {
 };
 
 export const BACKGROUND_LIST = Object.values(BACKGROUNDS);
-
-export interface SubstrateDef {
-  id: SubstrateId;
-  name: string;
-  base: string;
-  shade: string;
-  grain: string;
-  /** Grain radius in scene units. */
-  grainSize: number;
-  density: number;
-  note: string;
-}
-
-export const SUBSTRATES: Record<SubstrateId, SubstrateDef> = {
-  'fine-sand': { id: 'fine-sand', name: 'Fine sand', base: '#E3D3AE', shade: '#C8B389', grain: '#F2E7CB', grainSize: 1.6, density: 160, note: 'Soft on barbels. Waste sits on top where you can see it.' },
-  gravel: { id: 'gravel', name: 'Gravel', base: '#C4B49A', shade: '#9C8A70', grain: '#DCCDB2', grainSize: 4.4, density: 110, note: 'Classic. Traps debris between the stones.' },
-  'dark-gravel': { id: 'dark-gravel', name: 'Dark gravel', base: '#4E4A45', shade: '#332F2C', grain: '#6B655D', grainSize: 4.8, density: 110, note: 'Makes fish colour up. Hides mulm a little too well.' },
-  soil: { id: 'soil', name: 'Aquasoil', base: '#3B322B', shade: '#241E19', grain: '#4C4137', grainSize: 3.2, density: 130, note: 'Feeds root plants, clouds if you dig in it.' }
-};
-
-export const SUBSTRATE_LIST = Object.values(SUBSTRATES);

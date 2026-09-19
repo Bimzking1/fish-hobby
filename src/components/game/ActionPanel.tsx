@@ -47,20 +47,32 @@ export function ActionPanel({ selectedFood, onSelectFood, onAction, done }: Prop
         ))}
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
-        {ACTIONS.map((a) => (
-          <button
-            key={a.id}
-            type="button"
-            onClick={() => onAction(a.id)}
-            className={`rounded-md border px-3 py-2.5 text-left text-[13px] transition-colors ${
-              done.includes(a.id)
-                ? 'border-reed/40 bg-reed/10 text-reed-dark'
-                : 'border-walnut/15 bg-shell/40 text-ink hover:border-walnut/40 hover:bg-shell'
-            }`}
-          >
-            {a.label}
-          </button>
-        ))}
+        {ACTIONS.map((a) => {
+          const isDone = done.includes(a.id);
+          return (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => onAction(a.id)}
+              aria-pressed={isDone}
+              title={isDone ? 'Done today — click to undo' : 'Mark this routine as done'}
+              className={`flex items-center justify-between gap-2 rounded-md border px-3 py-2.5 text-left text-[13px] transition-all active:scale-[0.98] ${
+                isDone
+                  ? 'border-reed/30 bg-reed/8 text-ink'
+                  : 'border-walnut/15 bg-shell/40 text-ink hover:border-walnut/40 hover:bg-shell'
+              }`}
+            >
+              <span>{a.label}</span>
+              <span
+                className={`grid h-4 w-4 shrink-0 place-items-center rounded-full text-[10px] transition-colors ${
+                  isDone ? 'bg-reed/25 text-reed' : 'border border-walnut/20 text-transparent'
+                }`}
+              >
+                ✓
+              </span>
+            </button>
+          );
+        })}
       </div>
     </section>
   );

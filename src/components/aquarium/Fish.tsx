@@ -132,13 +132,25 @@ export const FishBody = memo(function FishBody({ species, condition = 'healthy',
   );
 });
 
-/** A fish placed and animated inside the scene. */
-export const SwimmingFish = memo(function SwimmingFish({ fish }: { fish: FishInstance }) {
+/** A fish placed and animated inside the scene. `bound` is the water column
+ *  [top, bottom] it may swim in — the fish never rises above the waterline. */
+export const SwimmingFish = memo(function SwimmingFish({ fish, bound }: { fish: FishInstance; bound?: [number, number] }) {
   const def = FISH_SPECIES[fish.species];
   const mods = CONDITION_STYLE[fish.condition];
   const dead = fish.condition === 'dead';
-  const [top, bottom] = zoneBand(def.zone);
-  const y = dead ? SCENE.surfaceY + 20 : lerp(top, bottom, fish.depth);
+  const [zt, zb] = zoneBand(def.zone);
+
+  let top = bound ? Math.max(zt, bound[0]) : zt;
+  let bottom = bound ? Math.min(zb, bound[1]) : zb;
+  // The species' preferred band can drift entirely above a low water column —
+  // then the fish has nowhere else to go but the water that exists.
+  if (bound && top > bottom) {
+    top = Math.max(bound[0], bound[1] - 26);
+    bottom = bound[1] - 8;
+    if (bottom <= top) bottom = top + 12;
+  }
+
+  const y = dead ? (bound ? bound[0] + 4 : SCENE.surfaceY + 20) : lerp(top, bottom, fish.depth);
   const scale = (def.length / 100) * fish.scale;
   const travel = SCENE.width - def.length - 90;
   const startX = 50 + fish.phase * travel * 0.9;
@@ -166,11 +178,11 @@ export const SwimmingFish = memo(function SwimmingFish({ fish }: { fish: FishIns
   );
 });
 
-export function FishLayer({ fish }: { fish: FishInstance[] }) {
+export function FishLayer({ fish, bound }: { fish: FishInstance[]; bound?: [number, number] }) {
   return (
     <g className="layer-fish">
       {fish.map((f) => (
-        <SwimmingFish key={f.id} fish={f} />
+        <SwimmingFish key={f.id} fish={f} bound={bound} />
       ))}
     </g>
   );

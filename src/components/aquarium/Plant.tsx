@@ -19,6 +19,58 @@ function PlantShape({ species, seed, droop }: { species: PlantSpecies; seed: num
   const rand = mulberry32(seed);
   const { palette, height, spread, leaves, form } = species;
 
+  if (form === 'anemone') {
+    const tentacles = Array.from({ length: leaves }, (_, i) => {
+      const a = (i / leaves) * Math.PI * 2 + range(rand, -0.2, 0.2);
+      const len = height * range(rand, 0.7, 1) + droop * 0.5;
+      const sway = range(rand, 10, 34);
+      return { a, len, sway };
+    });
+    return (
+      <g>
+        <circle cx={0} cy={0} r={spread * 0.34} fill={palette.leafDark} opacity={0.9} />
+        {tentacles.map((t, i) => (
+          <path
+            key={i}
+            d={`M0,0 q${Math.cos(t.a + 1) * t.sway},${Math.sin(t.a + 1) * t.sway} ${Math.cos(t.a) * t.len},${Math.sin(t.a) * t.len}`}
+            stroke={i % 3 === 0 ? palette.leafDark : palette.leaf}
+            strokeWidth={5.5}
+            strokeLinecap="round"
+            fill="none"
+          />
+        ))}
+        <circle cx={0} cy={0} r={spread * 0.5} fill={palette.stem} opacity={0.25} />
+      </g>
+    );
+  }
+
+  if (form === 'kelp') {
+    const blades = Array.from({ length: leaves }, (_, i) => {
+      const t = leaves === 1 ? 0.5 : i / (leaves - 1);
+      const angle = (t - 0.5) * 40 + range(rand, -8, 8);
+      const len = height * range(rand, 0.6, 1) + droop * 1.4;
+      const width = 10;
+      const bend = range(rand, -18, 18) + droop * 1.6;
+      return { angle, len, width, bend, dark: i % 3 === 0 };
+    });
+    return (
+      <g>
+        {blades.map((b, i) => (
+          <g key={i} transform={`rotate(${b.angle + droop * 0.5})`}>
+            <path d={ribbon(b.len, b.width, b.bend)} fill={b.dark ? palette.leafDark : palette.leaf} />
+            <path
+              d={`M0,0 C${b.bend * 0.3},${-b.len * 0.5} ${b.bend * 0.8},${-b.len * 0.8} ${b.bend},${-b.len}`}
+              stroke={palette.leafDark}
+              strokeOpacity={0.45}
+              strokeWidth={1.1}
+              fill="none"
+            />
+          </g>
+        ))}
+      </g>
+    );
+  }
+
   if (form === 'moss') {
     const tufts = Array.from({ length: leaves }, () => ({
       x: range(rand, -spread / 2, spread / 2),
@@ -104,12 +156,12 @@ export const PlantIcon = memo(function PlantIcon({ species, stage = 'mature' }: 
   );
 });
 
-export const Plant = memo(function Plant({ plant }: { plant: PlantInstance }) {
+export const Plant = memo(function Plant({ plant, surface }: { plant: PlantInstance; surface: number }) {
   const def = PLANT_SPECIES[plant.species];
   const style = PLANT_STAGE_STYLE[plant.stage];
   const x = SCENE.wallX + 40 + plant.x * (SCENE.width - SCENE.wallX * 2 - 80);
   const floating = def.form === 'floating';
-  const y = floating ? SCENE.surfaceY + 10 : SCENE.floorY + 6;
+  const y = floating ? SCENE.surfaceY + 10 : surface + 6;
 
   return (
     <g
@@ -141,11 +193,11 @@ export const Plant = memo(function Plant({ plant }: { plant: PlantInstance }) {
   );
 });
 
-export function PlantLayer({ plants }: { plants: PlantInstance[] }) {
+export function PlantLayer({ plants, surface }: { plants: PlantInstance[]; surface: number }) {
   return (
     <g className="layer-plants">
       {plants.map((p) => (
-        <Plant key={p.id} plant={p} />
+        <Plant key={p.id} plant={p} surface={surface} />
       ))}
     </g>
   );
